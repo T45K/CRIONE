@@ -10,8 +10,7 @@ plugins {
 
     // Apply the application plugin to add support for building a CLI application.
     application
-
-    id("jacoco")
+    jacoco
 }
 
 repositories {
@@ -34,4 +33,11 @@ dependencies {
 application {
     // Define the main class for the application
     mainClassName = "jp.ac.osaka_u.ist.sdl.crione.AppKt"
+}
+
+tasks.jacocoTestReport {
+    reports {
+        xml.isEnabled = true
+        html.isEnabled = true
+    }
 }
