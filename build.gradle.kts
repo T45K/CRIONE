@@ -17,11 +17,21 @@ repositories {
     // Use jcenter for resolving dependencies.
     // You can declare any Maven/Ivy/file repository here.
     jcenter()
+    mavenCentral()
 }
 
 dependencies {
     // Use the Kotlin JDK 8 standard library.
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+
+    // Use RefactoringMiner
+    implementation(fileTree(mapOf("dir" to "libs", "include" to arrayOf("*.jar"))))
+
+    // User JDT
+    implementation("org.eclipse.jdt:org.eclipse.jdt.core:3.18.0")
+
+    // Use JGit
+    implementation("org.eclipse.jgit:org.eclipse.jgit:5.5.0.201909110433-r")
 
     // Use the Kotlin test library.
     testImplementation("org.jetbrains.kotlin:kotlin-test")
