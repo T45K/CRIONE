@@ -26,7 +26,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
     // Use RefactoringMiner
-    implementation("org.refactoringminer:RefactoringMiner:1.0.0")
+    implementation(fileTree(mapOf("dir" to "libs", "include" to arrayOf("*.jar"))))
 
     // User JDT
     implementation("org.eclipse.jdt:org.eclipse.jdt.core:3.18.0")
