@@ -48,18 +48,8 @@ jobs:
       - run:
           name: Collect test results
           command: |
+            gradle jacocoTestReport
             mkdir -p ~/junit
             find . -type f -regex ".*/build/test-results/test/.*xml" -exec cp {} ~/junit/ \;
-            cp -r build/reports/tests/test/* ~/junit
 
-      - store_test_results:
-          path: ~/junit
-
-      - store_artifacts:
-          path: ~/junit
-
-      # ==== Measure code coverage
-      - run: gradle jacocoTestReport
-
-      # ===== Collect and upload coverage reports
       - run: bash <(curl -s https://codecov.io/bash)
