@@ -6,7 +6,7 @@ fun search(query: String, sourceCodes: List<SourceCode>): List<Clone> {
     return sourceCodes.flatMap { sourceCode: SourceCode -> searchFromSingleSourceCode(query, sourceCode) }
 }
 
-fun searchFromSingleSourceCode(query: String, sourceCode: SourceCode): List<Clone> {
+private fun searchFromSingleSourceCode(query: String, sourceCode: SourceCode): List<Clone> {
     val tokens: List<Triple<String, Int, Int>> = getTokenList(sourceCode.contents)
     val (querySize: Int, hashedQuery: String) = analyzeQuery(query)
 
@@ -23,7 +23,7 @@ fun searchFromSingleSourceCode(query: String, sourceCode: SourceCode): List<Clon
     return clones
 }
 
-fun analyzeQuery(query: String): Pair<Int, String> {
+private fun analyzeQuery(query: String): Pair<Int, String> {
     val tokens: List<Triple<String, Int, Int>> = getTokenList(query)
     val normalizedCode = tokens.joinToString(" ") { token -> token.first }
     return tokens.size to normalizedCode
