@@ -27,7 +27,7 @@ dependencies {
     // Use RefactoringMiner
     implementation(fileTree(mapOf("dir" to "libs", "include" to arrayOf("*.jar"))))
 
-    // User JDT
+    // Use JDT
     implementation("org.eclipse.jdt:org.eclipse.jdt.core:3.18.0")
 
     // Use JGit
