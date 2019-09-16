@@ -21,7 +21,7 @@ class CloneSearcherKtTest {
         assertEquals(3, clones.size)
 
         val (filePath0, beginIndex0, endIndex0, code0) = clones[0]
-        assertEquals(Paths.get("./sample/cloneSearch/File1.java"), filePath0)
+        assertEquals(Paths.get("sample/cloneSearch/File1.java"), filePath0)
         assertEquals(85, beginIndex0)
         assertEquals(206, endIndex0)
         assertEquals("int a = 0;\n" +
@@ -32,7 +32,7 @@ class CloneSearcherKtTest {
                 "        String f = \"0\";", code0)
 
         val (filePath1, beginIndex1, endIndex1, code1) = clones[1]
-        assertEquals(Paths.get("./sample/cloneSearch/File1.java"), filePath1)
+        assertEquals(Paths.get("sample/cloneSearch/File1.java"), filePath1)
         assertEquals(264, beginIndex1)
         assertEquals(380, endIndex1)
         assertEquals("int g = 1;\n" +
@@ -43,7 +43,7 @@ class CloneSearcherKtTest {
                 "        String l = \"1\";", code1)
 
         val (filePath2, beginIndex2, endIndex2, code2) = clones[2]
-        assertEquals(Paths.get("./sample/cloneSearch/File2.java"), filePath2)
+        assertEquals(Paths.get("sample/cloneSearch/File2.java"), filePath2)
         assertEquals(84, beginIndex2)
         assertEquals(205, endIndex2)
         assertEquals("int g = 1;\n" +
