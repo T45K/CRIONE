@@ -12,7 +12,7 @@ class CloneSearcherKtTest {
     @Test
     fun testSearch() {
         val query = "int a = 0; char b = '0'; double c = 0d; float d = 0f; long e = 0l; String f = \"0\";"
-        val fileList: List<Pair<Path, String>> = Files.walk(Paths.get("./sample/cloneSearch"))
+        val fileList: List<Pair<Path, String>> = Files.walk(Paths.get("sample/cloneSearch"))
                 .filter { filePath -> filePath.toString().contains(".java") }
                 .map { filePath -> filePath to String(Files.readAllBytes(filePath)) }
                 .toList()
