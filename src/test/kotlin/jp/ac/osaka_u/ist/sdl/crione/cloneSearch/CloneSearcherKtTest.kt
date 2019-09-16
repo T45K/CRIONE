@@ -12,10 +12,7 @@ class CloneSearcherKtTest {
     @Test
     fun testSearch() {
         val query = "int a = 0; char b = '0'; double c = 0d; float d = 0f; long e = 0l; String f = \"0\";"
-        val fileList: List<Pair<Path, String>> = Files.walk(Paths.get("sample/cloneSearch"))
-                .filter { filePath -> filePath.toString().contains(".java") }
-                .map { filePath -> filePath to String(Files.readAllBytes(filePath)) }
-                .toList()
+        val fileList: List<Pair<Path, String>> = listOf(getSourceCode(Paths.get("sample/cloneSearch/File1.java")), getSourceCode(Paths.get("sample/cloneSearch/File2.java")), getSourceCode(Paths.get("sample/cloneSearch/File3.java")))
 
         val clones: List<Clone> = search(query, fileList)
         assertEquals(3, clones.size)
@@ -52,5 +49,9 @@ class CloneSearcherKtTest {
                 "        float j = 1f;\n" +
                 "        long k = 1l;\n" +
                 "        String l = \"1\";", code2)
+    }
+
+    private fun getSourceCode(filePath: Path): Pair<Path, String> {
+        return filePath to String(Files.readAllBytes(filePath))
     }
 }
