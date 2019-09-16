@@ -11,7 +11,7 @@ class File1 {
         String f = "0";
     }
 
-    // not clone
+    // clone
     public void sample2() {
         int g = 1;
         char h = 1;

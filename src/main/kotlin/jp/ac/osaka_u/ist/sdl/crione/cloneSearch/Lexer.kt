@@ -11,7 +11,7 @@ fun getTokenList(code: String): List<Triple<String, Int, Int>> {
     val tokens: MutableList<Triple<String, Int, Int>> = mutableListOf()
     var tokenType: Int = scanner.nextToken
     while (tokenType != TokenNameEOF) {
-        val token: String = if (isIdentifier(tokenType)) "$" else scanner.currentTokenSource.toString()
+        val token: String = if (isIdentifier(tokenType)) "$" else String(scanner.currentTokenSource)
         tokens.add(Triple(token, scanner.currentTokenStartPosition, scanner.currentTokenEndPosition))
 
         tokenType = scanner.nextToken
