@@ -20,7 +20,7 @@ fun getTokenList(code: String): List<Triple<String, Int, Int>> {
     return tokens
 }
 
-fun isIdentifier(tokenType: Int): Boolean {
+private fun isIdentifier(tokenType: Int): Boolean {
     @Suppress("DEPRECATION")
     when (tokenType) {
         TokenNameIdentifier,
