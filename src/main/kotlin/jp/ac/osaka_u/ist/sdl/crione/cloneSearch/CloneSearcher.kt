@@ -10,7 +10,6 @@ fun search(query: String, sourceCodes: List<Pair<Path, String>>): List<Clone> {
 private fun searchFromSingleSourceCode(query: String, sourceCode: Pair<Path, String>): List<Clone> {
     val tokens: List<Triple<String, Int, Int>> = getTokenList(sourceCode.second)
     val (querySize: Int, hashedQuery: String) = analyzeQuery(query)
-    println(hashedQuery)
 
     val clones: MutableList<Clone> = mutableListOf()
     for (i in querySize..tokens.size) {
@@ -19,7 +18,9 @@ private fun searchFromSingleSourceCode(query: String, sourceCode: Pair<Path, Str
             continue
         }
 
-        clones.add(Clone(sourceCode.first, tokens[i - querySize].second, tokens[i - 1].third, tokenSequence))
+        val beginIndex = tokens[i - querySize].second
+        val endIndex = tokens[i - 1].third
+        clones.add(Clone(sourceCode.first, beginIndex, endIndex, sourceCode.second.substring(beginIndex, endIndex + 1)))
     }
 
     return clones
