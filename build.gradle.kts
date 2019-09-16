@@ -33,8 +33,11 @@ dependencies {
     // Use JGit
     implementation("org.eclipse.jgit:org.eclipse.jgit:5.5.0.201909110433-r")
 
-    // Use Guava
-    implementation("com.google.guava:guava:11.0.2")
+    // Use digest method
+    implementation("commons-codec:commons-codec:1.12")
+
+    // Use Logger
+    implementation("ch.qos.logback:logback-classic:1.1.3")
 
     // Use the Kotlin test library.
     testImplementation("org.jetbrains.kotlin:kotlin-test")
