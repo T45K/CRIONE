@@ -26,6 +26,7 @@ dependencies {
 
     // Use RefactoringMiner
     implementation(fileTree(mapOf("dir" to "libs", "include" to arrayOf("*.jar"))))
+    implementation("org.apache.commons:commons-lang3:3.9")
 
     // Use JDT
     implementation("org.eclipse.jdt:org.eclipse.jdt.core:3.18.0")
