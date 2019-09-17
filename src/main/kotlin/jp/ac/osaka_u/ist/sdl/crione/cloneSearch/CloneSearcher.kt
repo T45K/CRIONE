@@ -3,7 +3,7 @@ package jp.ac.osaka_u.ist.sdl.crione.cloneSearch
 import org.apache.commons.codec.digest.DigestUtils.md5Hex
 import java.nio.file.Path
 
-fun search(query: String, sourceCodes: List<Pair<Path, String>>): List<Clone> =
+fun search(query: String, sourceCodes: List<Pair<Path, String>>) =
         sourceCodes.flatMap { sourceCode: Pair<Path, String> -> searchFromSingleSourceCode(query, sourceCode) }
 
 private fun searchFromSingleSourceCode(query: String, sourceCode: Pair<Path, String>): List<Clone> {
