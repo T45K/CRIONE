@@ -8,10 +8,6 @@ import org.refactoringminer.api.RefactoringHandler
 import org.refactoringminer.rm1.GitHistoryRefactoringMinerImpl
 import org.refactoringminer.util.GitServiceImpl
 
-
-/**
- * repositoryPath must include ".../.git"
- */
 fun mining(repositoryPath: String): List<String> {
     val gitService: GitService = GitServiceImpl()
     val repository: Repository = gitService.cloneIfNotExists(repositoryPath, "https://github.com/danilofes/refactoring-toy-example.git")
