@@ -12,17 +12,24 @@ import org.refactoringminer.util.GitServiceImpl
 /**
  * repositoryPath must include ".../.git"
  */
-fun mining(repositoryPath: String) {
+fun mining(repositoryPath: String): List<String> {
     val gitService: GitService = GitServiceImpl()
-    val miner: GitHistoryRefactoringMiner = GitHistoryRefactoringMinerImpl()
     val repository: Repository = gitService.cloneIfNotExists(repositoryPath, "https://github.com/danilofes/refactoring-toy-example.git")
+    val miner: GitHistoryRefactoringMiner = GitHistoryRefactoringMinerImpl()
 
+    val extractMethodCommitHashes: MutableList<String> = mutableListOf()
     miner.detectAll(repository, "master", object : RefactoringHandler() {
         override fun handle(commitId: String?, refactorings: List<Refactoring>?) {
-            println("Refactorings at " + commitId!!)
-            for (ref in refactorings!!) {
-                println(ref.toString())
+            val containsExtractMethod = refactorings!!.any { isExtractMethodRefactoring(it) }
+            if (containsExtractMethod) {
+                extractMethodCommitHashes.add(commitId!!)
             }
         }
     })
+
+    return extractMethodCommitHashes
+}
+
+private fun isExtractMethodRefactoring(refactoring: Refactoring): Boolean {
+    return refactoring.toString().contains("Extract Method")
 }
