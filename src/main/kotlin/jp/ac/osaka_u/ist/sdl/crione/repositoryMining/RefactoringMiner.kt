@@ -16,7 +16,7 @@ fun mining(repositoryPath: String): List<String> {
     val extractMethodCommitHashes: MutableList<String> = mutableListOf()
     miner.detectAll(repository, "master", object : RefactoringHandler() {
         override fun handle(commitId: String?, refactorings: List<Refactoring>?) {
-            val containsExtractMethod = refactorings!!.any { isExtractMethodRefactoring(it) }
+            val containsExtractMethod = refactorings?.any(::isExtractMethodRefactoring) ?: false
             if (containsExtractMethod) {
                 extractMethodCommitHashes.add(commitId!!)
             }
