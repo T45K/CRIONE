@@ -23,7 +23,7 @@ class MyRepository(private val repository: Repository) {
     private val diffAlgorithm: DiffAlgorithm = DiffAlgorithm.getAlgorithm(repository.config.getEnum(ConfigConstants.CONFIG_DIFF_SECTION, null, ConfigConstants.CONFIG_KEY_ALGORITHM, DiffAlgorithm.SupportedAlgorithm.HISTOGRAM))
 
     fun checkout(commitId: String) {
-        git.checkout().setStartPoint(commitId).call()
+        git.checkout().setName(commitId).call()
     }
 
     fun getSourceCodes(srcDir: String): List<Pair<String, String>> {
