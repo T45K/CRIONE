@@ -4,7 +4,6 @@ import org.junit.Test
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
-import kotlin.streams.toList
 import kotlin.test.assertEquals
 
 class CloneSearcherKtTest {
