@@ -6,7 +6,13 @@ import jp.ac.osaka_u.ist.sdl.crione.repositoryMining.MyRepository
 import jp.ac.osaka_u.ist.sdl.crione.repositoryMining.mining
 import org.eclipse.jgit.lib.Repository
 import org.refactoringminer.util.GitServiceImpl
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.nio.file.Paths
+
+class Main
+
+val logger: Logger = LoggerFactory.getLogger(Main::class.java)
 
 fun main(args: Array<String>) {
     val (projectDir, cloneURL, srcDir) = args
@@ -20,6 +26,6 @@ fun main(args: Array<String>) {
         val deletedDiffs: List<String> = myRepository.getDeletedDiffs()
 
         val clones: List<List<Clone>> = deletedDiffs.map { query -> search(query, sourceCodes) }
-        println(clones)
+        logger.info(clones.size.toString())
     }
 }
