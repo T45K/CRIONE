@@ -3,6 +3,7 @@ package jp.ac.osaka_u.ist.sdl.crione.repositoryMining
 import org.eclipse.jgit.lib.Repository
 import org.junit.Test
 import org.refactoringminer.util.GitServiceImpl
+import java.nio.file.Paths
 import kotlin.test.assertEquals
 
 class MyRepositoryTest {
@@ -35,7 +36,7 @@ class MyRepositoryTest {
     fun testGetSourceCodes() {
         val myRepository = MyRepository(repository)
         myRepository.checkout("master")
-        val sourceCodes: List<Pair<String, String>> = myRepository.getSourceCodes("sample/refactoring-toy-example/src")
+        val sourceCodes: List<Pair<String, String>> = myRepository.getSourceCodes(Paths.get("sample/refactoring-toy-example/src"))
 
         assertEquals(18, sourceCodes.size)
     }

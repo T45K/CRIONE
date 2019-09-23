@@ -19,7 +19,7 @@ import org.eclipse.jgit.revwalk.RevWalk
 import org.eclipse.jgit.treewalk.AbstractTreeIterator
 import org.eclipse.jgit.treewalk.CanonicalTreeParser
 import java.nio.file.Files
-import java.nio.file.Paths
+import java.nio.file.Path
 import kotlin.streams.toList
 
 class MyRepository(private val repository: Repository) {
@@ -31,8 +31,8 @@ class MyRepository(private val repository: Repository) {
         git.checkout().setName(commitId).call()
     }
 
-    fun getSourceCodes(srcDir: String): List<Pair<String, String>> {
-        return Files.walk(Paths.get(srcDir))
+    fun getSourceCodes(srcDir: Path): List<Pair<String, String>> {
+        return Files.walk(srcDir)
                 .filter { path -> path.toString().endsWith(".java") }
                 .map { path -> path.toString() to String(Files.readAllBytes(path)) }
                 .toList()
