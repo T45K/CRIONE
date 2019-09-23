@@ -1,21 +1,14 @@
 package jp.ac.osaka_u.ist.sdl.crione.repositoryMining
 
-import org.eclipse.jgit.lib.Repository
+import jp.ac.osaka_u.ist.sdl.crione.testEntity.TestInstance
 import org.junit.Test
-import org.refactoringminer.util.GitServiceImpl
+import java.nio.file.Paths
 import kotlin.test.assertEquals
 
 class MyRepositoryTest {
-    companion object {
-        private const val projectPath: String = "sample/refactoring-toy-example"
-        private const val cloneURL: String = "https://github.com/danilofes/refactoring-toy-example.git"
-    }
-
-    private val repository: Repository = GitServiceImpl().cloneIfNotExists(projectPath, cloneURL)
-
     @Test
     fun testGetDeletedDiff() {
-        val myRepository = MyRepository(repository)
+        val myRepository = TestInstance.myRepositoryInstance
         myRepository.checkout("master")
         val deletedDiffs: List<String> = myRepository.getDeletedDiffs()
 
@@ -33,9 +26,9 @@ class MyRepositoryTest {
 
     @Test
     fun testGetSourceCodes() {
-        val myRepository = MyRepository(repository)
+        val myRepository = TestInstance.myRepositoryInstance
         myRepository.checkout("master")
-        val sourceCodes: List<Pair<String, String>> = myRepository.getSourceCodes("sample/refactoring-toy-example/src")
+        val sourceCodes: List<Pair<String, String>> = myRepository.getSourceCodes(Paths.get("sample/refactoring-toy-example/src"))
 
         assertEquals(18, sourceCodes.size)
     }
