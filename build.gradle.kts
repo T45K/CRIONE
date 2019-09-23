@@ -49,7 +49,7 @@ dependencies {
 
 application {
     // Define the main class for the application
-    mainClassName = "jp.ac.osaka_u.ist.sdl.crione.AppKt"
+    mainClassName = "jp.ac.osaka_u.ist.sdl.crione.MainKt"
 }
 
 tasks.jacocoTestReport {
