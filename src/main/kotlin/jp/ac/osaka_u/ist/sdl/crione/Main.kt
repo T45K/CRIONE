@@ -16,7 +16,7 @@ val logger: Logger = LoggerFactory.getLogger(Main::class.java)
 
 fun main(args: Array<String>) {
     val (projectDir, cloneURL, srcDir) = args
-    val repository: Repository = GitServiceImpl().cloneIfNotExists(projectDir, cloneURL)
+    val zrepository: Repository = GitServiceImpl().cloneIfNotExists(projectDir, cloneURL)
     val miningResult: List<String> = mining(repository)
 
     val myRepository = MyRepository(repository)
