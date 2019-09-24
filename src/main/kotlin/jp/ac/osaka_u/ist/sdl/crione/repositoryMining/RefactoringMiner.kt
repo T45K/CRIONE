@@ -22,5 +22,5 @@ fun mining(repository: Repository): List<String> {
 }
 
 private fun isExtractMethodRefactoring(refactoring: Refactoring): Boolean {
-    return refactoring.toString().contains("Extract Method")
+    return refactoring.name == "Extract Method"
 }
