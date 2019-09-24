@@ -25,7 +25,11 @@ import kotlin.streams.toList
 class MyRepository(private val repository: Repository) {
     private val git: Git = Git(repository)
     private val reader: ObjectReader = repository.newObjectReader()
-    private val diffAlgorithm: DiffAlgorithm = DiffAlgorithm.getAlgorithm(repository.config.getEnum(ConfigConstants.CONFIG_DIFF_SECTION, null, ConfigConstants.CONFIG_KEY_ALGORITHM, DiffAlgorithm.SupportedAlgorithm.HISTOGRAM))
+    private val diffAlgorithm: DiffAlgorithm = DiffAlgorithm.getAlgorithm(repository.config.getEnum(
+            ConfigConstants.CONFIG_DIFF_SECTION,
+            null,
+            ConfigConstants.CONFIG_KEY_ALGORITHM,
+            DiffAlgorithm.SupportedAlgorithm.MYERS))
 
     fun checkout(commitId: String) {
         git.checkout().setName(commitId).call()
@@ -39,16 +43,16 @@ class MyRepository(private val repository: Repository) {
     }
 
     fun getDeletedDiffs(): List<String> {
-        val headObjectId: ObjectId = repository.resolve(Constants.HEAD)
-        val previousHeadObjectId: ObjectId = repository.resolve("${Constants.HEAD}^")
-        val headTreeParser: AbstractTreeIterator = getTreeParser(headObjectId)
-        val previousHeadTreeParser: AbstractTreeIterator = getTreeParser(previousHeadObjectId)
+        val currentObjectId: ObjectId = repository.resolve(Constants.HEAD)
+        val previousObjectId: ObjectId = repository.resolve("${Constants.HEAD}^")
+        val currentTre: AbstractTreeIterator = getTreeParser(currentObjectId)
+        val previousTree: AbstractTreeIterator = getTreeParser(previousObjectId)
 
         return git.diff()
-                .setNewTree(headTreeParser)
-                .setOldTree(previousHeadTreeParser)
+                .setOldTree(previousTree)
+                .setNewTree(currentTre)
                 .call()
-                .flatMap { diffEntry -> calculateDeletedDiffs(diffEntry, diffAlgorithm, reader) }
+                .flatMap(this::calculateDeletedDiffs)
                 .toList()
     }
 
@@ -64,7 +68,7 @@ class MyRepository(private val repository: Repository) {
         return treeParser
     }
 
-    private fun calculateDeletedDiffs(diffEntry: DiffEntry, diffAlgorithm: DiffAlgorithm, reader: ObjectReader): List<String> {
+    private fun calculateDeletedDiffs(diffEntry: DiffEntry): List<String> {
         val oldText: RawText = readText(diffEntry.oldId, reader)
         val newText: RawText = readText(diffEntry.newId, reader)
 
