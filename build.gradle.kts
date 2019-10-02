@@ -22,29 +22,29 @@ repositories {
 
 dependencies {
     // Use the Kotlin JDK 8 standard library.
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
     // Use RefactoringMiner
-    implementation(fileTree(mapOf("dir" to "libs", "include" to arrayOf("*.jar"))))
-    implementation("org.apache.commons:commons-lang3:3.9")
+    compile(fileTree(mapOf("dir" to "libs", "include" to arrayOf("*.jar"))))
+    compile("org.apache.commons:commons-lang3:3.9")
 
     // Use JDT
-    implementation("org.eclipse.jdt:org.eclipse.jdt.core:3.18.0")
+    compile("org.eclipse.jdt:org.eclipse.jdt.core:3.18.0")
 
     // Use JGit
-    implementation("org.eclipse.jgit:org.eclipse.jgit:5.5.0.201909110433-r")
+    compile("org.eclipse.jgit:org.eclipse.jgit:5.5.0.201909110433-r")
 
     // Use digest method
-    implementation("commons-codec:commons-codec:1.12")
+    compile("commons-codec:commons-codec:1.12")
 
     // Use Logger
-    implementation("ch.qos.logback:logback-classic:1.1.3")
+    compile("ch.qos.logback:logback-classic:1.1.3")
 
     // Use the Kotlin test library.
-    testImplementation("org.jetbrains.kotlin:kotlin-test")
+    testCompile("org.jetbrains.kotlin:kotlin-test")
 
     // Use the Kotlin JUnit integration.
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
+    testCompile("org.jetbrains.kotlin:kotlin-test-junit")
 }
 
 application {
@@ -57,4 +57,17 @@ tasks.jacocoTestReport {
         xml.isEnabled = true
         html.isEnabled = true
     }
+}
+
+val jar by tasks.getting(Jar::class) {
+    manifest {
+        attributes["Main-Class"] = "jp.ac.osaka_u.ist.sdl.crione.MainKt"
+    }
+
+    from(
+            configurations.compile.get().map {
+                if (it.isDirectory) it else zipTree(it)
+            }
+    )
+    exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
 }
