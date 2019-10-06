@@ -5,7 +5,12 @@ import org.junit.Test
 class MainKtTest {
 
     @Test
-    fun testMain() {
-        main(arrayOf("sample/refactoring-toy-example", "https://github.com/danilofes/refactoring-toy-example.git", "src"))
+    fun testMain1() {
+        main(arrayOf("-p", "sample/refactoring-toy-example", "-c", "https://github.com/danilofes/refactoring-toy-example.git", "-s", "src"))
+    }
+
+    @Test
+    fun testMain2() {
+        main(arrayOf("-p", "sample/refactoring-toy-example", "-c", "https://github.com/danilofes/refactoring-toy-example.git", "-s", "source"))
     }
 }
