@@ -8,6 +8,7 @@ import org.eclipse.jgit.lib.Repository
 import org.refactoringminer.util.GitServiceImpl
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.nio.file.Files
 import java.nio.file.Paths
 
 class Main
@@ -15,13 +16,14 @@ class Main
 val logger: Logger = LoggerFactory.getLogger(Main::class.java)
 
 fun main(args: Array<String>) {
-    val (projectDir, cloneURL, srcDir) = args
+    val (projectDir, cloneURL, srcDirs, trackingBranch) = buildFromArgs(args.toList())
     val repository: Repository = GitServiceImpl().cloneIfNotExists(projectDir, cloneURL)
-    val miningResult: List<String> = mining(repository)
+    val miningResult: List<String> = mining(repository, trackingBranch)
 
     val myRepository = MyRepository(repository)
     for (commitId: String in miningResult) {
         myRepository.checkout(commitId)
+        val srcDir: String = srcDirs.find { Files.exists(Paths.get(projectDir, it)) } ?: ""
         val sourceCodes: List<Pair<String, String>> = myRepository.getSourceCodes(Paths.get(projectDir, srcDir))
         val deletedDiffs: List<String> = myRepository.getDeletedDiffs()
 
