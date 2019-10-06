@@ -18,16 +18,15 @@ val logger: Logger = LoggerFactory.getLogger(Main::class.java)
 fun main(args: Array<String>) {
     val (projectDir, cloneURL, srcDirs, trackingBranch) = buildFromArgs(args.toList())
     val repository: Repository = GitServiceImpl().cloneIfNotExists(projectDir, cloneURL)
-    val miningResult: List<String> = mining(repository, trackingBranch)
+    val miningResult: List<Pair<String, String>> = mining(repository, trackingBranch)
 
     val myRepository = MyRepository(repository)
-    for (commitId: String in miningResult) {
+    for ((extractedCode: String, commitId: String) in miningResult) {
         myRepository.checkout(commitId)
         val srcDir: String = srcDirs.find { Files.exists(Paths.get(projectDir, it)) } ?: ""
         val sourceCodes: List<Pair<String, String>> = myRepository.getSourceCodes(Paths.get(projectDir, srcDir))
-        val deletedDiffs: List<String> = myRepository.getDeletedDiffs()
 
-        val clones: List<List<Clone>> = deletedDiffs.map { query -> search(query, sourceCodes) }
-        logger.info(clones.size.toString())
+        val clone: List<Clone> = search(extractedCode, sourceCodes)
+        logger.info(clone.size.toString())
     }
 }
