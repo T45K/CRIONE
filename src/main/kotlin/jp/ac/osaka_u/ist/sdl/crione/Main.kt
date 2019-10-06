@@ -23,7 +23,7 @@ fun main(args: Array<String>) {
     val myRepository = MyRepository(repository)
     for (commitId: String in miningResult) {
         myRepository.checkout(commitId)
-        val srcDir: String = srcDirs.find { Files.exists(Paths.get(it)) }!!
+        val srcDir: String = srcDirs.find { Files.exists(Paths.get(projectDir, it)) } ?: projectDir
         val sourceCodes: List<Pair<String, String>> = myRepository.getSourceCodes(Paths.get(projectDir, srcDir))
         val deletedDiffs: List<String> = myRepository.getDeletedDiffs()
 
