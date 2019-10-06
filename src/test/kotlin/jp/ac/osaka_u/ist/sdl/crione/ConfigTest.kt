@@ -28,4 +28,9 @@ class ConfigTest {
         val (_, _, srcDir, _) = buildFromArgs(listOf("-p", "sample/refactoring-toy-example", "-s", "src", "-s", "source"))
         assertEquals(listOf("src", "source"), srcDir)
     }
+
+    @Test(expected = RuntimeException::class)
+    fun configTest4() {
+        buildFromArgs(listOf())
+    }
 }

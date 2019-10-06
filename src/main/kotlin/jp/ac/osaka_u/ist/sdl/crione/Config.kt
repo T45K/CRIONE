@@ -1,5 +1,6 @@
 package jp.ac.osaka_u.ist.sdl.crione
 
+import org.kohsuke.args4j.CmdLineException
 import org.kohsuke.args4j.CmdLineParser
 import org.kohsuke.args4j.Option
 
@@ -12,8 +13,13 @@ fun buildFromArgs(args: List<String>): Config {
     val builder = Builder()
     val parser = CmdLineParser(builder)
 
-    parser.parseArgument(args)
-    return builder.build()
+    try {
+        parser.parseArgument(args)
+        return builder.build()
+    } catch (e: CmdLineException) {
+        parser.printUsage(System.out)
+        throw RuntimeException()
+    }
 }
 
 class Builder {
@@ -41,7 +47,7 @@ class Builder {
         this.srcDirs.add(srcDir)
     }
 
-    @Option(name = "-t", aliases = ["--tracking-branch"])
+    @Option(name = "-t", aliases = ["--tracking-branch"], usage = "Target tracking branch")
     private fun setTrackingBranch(trackingBranch: String) {
         this.trackingBranch = trackingBranch
     }
