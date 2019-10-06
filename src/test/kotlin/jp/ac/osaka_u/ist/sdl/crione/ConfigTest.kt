@@ -29,7 +29,7 @@ class ConfigTest {
         assertEquals(listOf("src", "source"), srcDir)
     }
 
-    @Test
+    @Test(expected = RuntimeException::class)
     fun configTest4() {
         buildFromArgs(listOf())
     }

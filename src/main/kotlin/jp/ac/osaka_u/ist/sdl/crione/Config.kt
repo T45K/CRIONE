@@ -3,7 +3,6 @@ package jp.ac.osaka_u.ist.sdl.crione
 import org.kohsuke.args4j.CmdLineException
 import org.kohsuke.args4j.CmdLineParser
 import org.kohsuke.args4j.Option
-import kotlin.system.exitProcess
 
 data class Config(val projectDir: String,
                   val cloneURL: String,
@@ -19,7 +18,7 @@ fun buildFromArgs(args: List<String>): Config {
         return builder.build()
     } catch (e: CmdLineException) {
         parser.printUsage(System.out)
-        exitProcess(0)
+        throw RuntimeException()
     }
 }
 
