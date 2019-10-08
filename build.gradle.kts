@@ -26,7 +26,8 @@ dependencies {
 
     // Use RefactoringMiner
     compile(fileTree(mapOf("dir" to "libs", "include" to arrayOf("*.jar"))))
-    compile("org.apache.commons:commons-lang3:3.9")
+    compile("org.apache.commons:commons-text:1.6")
+    compile("commons-io:commons-io:2.6")
 
     // Use JDT
     compile("org.eclipse.jdt:org.eclipse.jdt.core:3.18.0")
