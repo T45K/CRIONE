@@ -6,15 +6,26 @@ import org.refactoringminer.api.GitHistoryRefactoringMiner
 import org.refactoringminer.api.Refactoring
 import org.refactoringminer.api.RefactoringHandler
 import org.refactoringminer.rm1.GitHistoryRefactoringMinerImpl
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
+class RefactoringMiner
+
+val logger: Logger = LoggerFactory.getLogger(RefactoringMiner::class.java)
 
 fun mining(repository: Repository, trackingBranch: String): List<Pair<String, String>> {
     val miner: GitHistoryRefactoringMiner = GitHistoryRefactoringMinerImpl()
     val extractedCodeAndCommitHashes: MutableList<Pair<String, String>> = mutableListOf()
     miner.detectAll(repository, trackingBranch, object : RefactoringHandler() {
         override fun handle(commitId: String?, refactorings: List<Refactoring>?) {
-            extractedCodeAndCommitHashes.addAll(refactorings!!.filter(::isExtractMethodRefactoring)
+            val extractedMethodList: List<Pair<String, String>> = refactorings!!.filter(::isExtractMethodRefactoring)
                     .map { flatStatements(it as ExtractOperationRefactoring) to commitId!! }
-                    .toList())
+                    .toList()
+
+            extractedMethodList.map { it.toString() }
+                    .forEach(logger::info)
+
+            extractedCodeAndCommitHashes.addAll(extractedMethodList)
         }
     })
 
