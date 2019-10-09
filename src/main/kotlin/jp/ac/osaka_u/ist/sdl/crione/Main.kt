@@ -26,6 +26,8 @@ fun main(args: Array<String>) {
         val srcDir: String = srcDirs.find { Files.exists(Paths.get(projectDir, it)) } ?: ""
         val sourceCodes: List<Pair<String, String>> = myRepository.getSourceCodes(Paths.get(projectDir, srcDir))
 
+        logger.info(extractedCode)
+
         val clone: List<Clone> = search(extractedCode, sourceCodes)
         logger.info(clone.size.toString())
     }
