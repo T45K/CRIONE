@@ -8,6 +8,7 @@ import org.refactoringminer.api.RefactoringHandler
 import org.refactoringminer.rm1.GitHistoryRefactoringMinerImpl
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.lang.Exception
 
 class RefactoringMiner
 
@@ -26,6 +27,10 @@ fun mining(repository: Repository, trackingBranch: String): List<Pair<String, St
                     .forEach(logger::info)
 
             extractedCodeAndCommitHashes.addAll(extractedMethodList)
+        }
+
+        override fun handleException(commitId: String?, e: Exception?) {
+            logger.error(e.toString())
         }
     })
 
