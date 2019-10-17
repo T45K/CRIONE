@@ -19,8 +19,10 @@ fun mining(repository: Repository, trackingBranch: String): List<Pair<String, St
     val extractedCodeAndCommitHashes: MutableList<Pair<String, String>> = mutableListOf()
     miner.detectAll(repository, trackingBranch, object : RefactoringHandler() {
         override fun handle(commitId: String?, refactorings: List<Refactoring>?) {
-            val extractedMethodList: List<Pair<String, String>> = refactorings!!.filter(::isExtractMethodRefactoring)
-                    .map { flatStatements(it as ExtractOperationRefactoring) to commitId!! }
+            val extractedMethodList: List<Pair<String, String>> = refactorings!!.asSequence().filter(::isExtractMethodRefactoring)
+                    .map { flatStatements(it as ExtractOperationRefactoring) }
+                    .distinct()
+                    .map { contents -> contents to commitId!! }
                     .toList()
 
             extractedMethodList.map { it.toString() }
