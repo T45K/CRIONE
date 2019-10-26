@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sdl.crione.repositoryMining
 
 import org.eclipse.jgit.api.Git
+import org.eclipse.jgit.api.ResetCommand
 import org.eclipse.jgit.api.errors.CheckoutConflictException
 import org.eclipse.jgit.lib.Repository
 import org.slf4j.Logger
@@ -18,7 +19,7 @@ class MyRepository(repository: Repository) {
             git.checkout().setName(commitId).call()
         } catch (e: CheckoutConflictException) {
             logger.warn("conflict at $commitId")
-            git.stashCreate().call()
+            git.reset().setMode(ResetCommand.ResetType.HARD).setRef("HEAD").call()
             git.checkout().setName(commitId).call()
         }
     }
