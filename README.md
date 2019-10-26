@@ -2,4 +2,4 @@
 [![codecov](https://codecov.io/gh/T45K/CRIONE/branch/master/graph/badge.svg)](https://codecov.io/gh/T45K/CRIONE)
 
 # CRIONE
-Clone to be Refactored Indicator ON past Extract method
+Clone Refactoring Indicator ON past Extract method
