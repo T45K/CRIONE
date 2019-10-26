@@ -1,5 +1,6 @@
 package jp.ac.osaka_u.ist.sdl.crione.repositoryMining
 
+import gr.uom.java.xmi.decomposition.UMLOperationBodyMapper
 import gr.uom.java.xmi.diff.ExtractOperationRefactoring
 import org.eclipse.jgit.lib.Repository
 import org.refactoringminer.api.GitHistoryRefactoringMiner
@@ -43,9 +44,6 @@ private fun isExtractMethodRefactoring(refactoring: Refactoring): Boolean {
 }
 
 private fun flatStatements(refactoring: ExtractOperationRefactoring): String {
-    return refactoring.extractedOperation
-            .body
-            .compositeStatement
-            .statements
-            .joinToString("") { it.toString() }
+    val mapper: UMLOperationBodyMapper = refactoring.bodyMapper
+    return mapper.mappings.joinToString("") { it.fragment1.toString() }
 }
