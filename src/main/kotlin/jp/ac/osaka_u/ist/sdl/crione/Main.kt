@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sdl.crione
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.exc.MismatchedInputException
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import jp.ac.osaka_u.ist.sdl.crione.cloneSearch.Clone
@@ -24,7 +25,12 @@ val JSON_FILE_PATH: Path = Paths.get("src/main/resources/queryCode.json")
 fun main(args: Array<String>) {
     val (mode: Mode, projectDir, cloneURL, srcDir, trackingBranch) = buildFromArgs(args.toList())
     val mapper: ObjectMapper = jacksonObjectMapper()
-    val queryCodes: MutableSet<String> = mapper.readValue(JSON_FILE_PATH.toFile())
+    val queryCodes: MutableSet<String>
+    queryCodes = try {
+        mapper.readValue(JSON_FILE_PATH.toFile())
+    } catch (e: MismatchedInputException) {
+        mutableSetOf()
+    }
 
     when (mode) {
         Mode.SEARCH -> {

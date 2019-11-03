@@ -11,6 +11,6 @@ class MainKtTest {
 
     @Test
     fun testMain2() {
-        main(arrayOf("-m", "m", "-p", "sample/refactoring-toy-example", "-c", "https://github.com/danilofes/refactoring-toy-example.git", "-s", "source"))
+        main(arrayOf("-m", "s", "-p", "sample/refactoring-toy-example", "-c", "https://github.com/danilofes/refactoring-toy-example.git", "-s", "source"))
     }
 }
