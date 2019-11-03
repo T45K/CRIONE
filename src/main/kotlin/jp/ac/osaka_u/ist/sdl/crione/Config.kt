@@ -4,9 +4,10 @@ import org.kohsuke.args4j.CmdLineException
 import org.kohsuke.args4j.CmdLineParser
 import org.kohsuke.args4j.Option
 
-data class Config(val projectDir: String,
+data class Config(val mode: Mode,
+                  val projectDir: String,
                   val cloneURL: String,
-                  val srcDir: List<String>,
+                  val srcDir: String,
                   val trackingBranch: String)
 
 fun buildFromArgs(args: List<String>): Config {
@@ -23,13 +24,23 @@ fun buildFromArgs(args: List<String>): Config {
 }
 
 class Builder {
+    private var mode: Mode = Mode.SEARCH
     private var projectDir: String = ""
     private var cloneURL: String = ""
-    private var srcDirs: MutableList<String> = mutableListOf()
+    private var srcDir: String = ""
     private var trackingBranch: String = "master"
 
     fun build(): Config {
-        return Config(projectDir, cloneURL, srcDirs, trackingBranch)
+        return Config(mode, projectDir, cloneURL, srcDir, trackingBranch)
+    }
+
+    @Option(name = "-m", aliases = ["--mode"], usage = "mode: SEARCH or MINING", required = true)
+    private fun setMode(modeString: String) {
+        this.mode = when (modeString) {
+            "s" -> Mode.SEARCH
+            "m" -> Mode.MINING
+            else -> throw RuntimeException()
+        }
     }
 
     @Option(name = "-p", aliases = ["--project-dir"], usage = "Target project directory", required = true)
@@ -44,11 +55,16 @@ class Builder {
 
     @Option(name = "-s", aliases = ["--src-dir"], usage = "Source directory", required = true)
     private fun setSrcDir(srcDir: String) {
-        this.srcDirs.add(srcDir)
+        this.srcDir = srcDir
     }
 
     @Option(name = "-t", aliases = ["--tracking-branch"], usage = "Target tracking branch")
     private fun setTrackingBranch(trackingBranch: String) {
         this.trackingBranch = trackingBranch
     }
+}
+
+enum class Mode {
+    SEARCH,
+    MINING
 }
