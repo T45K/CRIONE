@@ -32,6 +32,7 @@ fun main(args: Array<String>) {
         mutableSetOf()
     }
 
+    val repository: Repository = GitServiceImpl().cloneIfNotExists(projectDir, cloneURL)
     when (mode) {
         Mode.SEARCH -> {
             val sourceCodes: List<Pair<String, String>> = Files.walk(Paths.get(projectDir, srcDir))
@@ -43,7 +44,6 @@ fun main(args: Array<String>) {
                     .toList()
         }
         Mode.MINING -> {
-            val repository: Repository = GitServiceImpl().cloneIfNotExists(projectDir, cloneURL)
             val extractedCodes: Set<String> = mining(repository, trackingBranch)
             queryCodes.addAll(extractedCodes)
             val contents: ByteArray = jacksonObjectMapper().writeValueAsBytes(queryCodes)
