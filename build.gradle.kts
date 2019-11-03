@@ -44,16 +44,18 @@ dependencies {
     // Use args4j
     compile("args4j:args4j:2.33")
 
-    // Use DB
-    compile("org.springframework.data:spring-data-jpa:2.2.0.RELEASE")
-    compile("javax.persistence:javax.persistence-api:2.2")
-
+    // Use JSON
+    compile("com.fasterxml.jackson.module:jackson-module-kotlin:2.10.0")
 
     // Use the Kotlin test library.
     testCompile("org.jetbrains.kotlin:kotlin-test")
 
     // Use the Kotlin JUnit integration.
     testCompile("org.jetbrains.kotlin:kotlin-test-junit")
+
+    // Use AssertJ
+    testCompile("org.assertj:assertj-core:3.14.0")
+
 }
 
 application {

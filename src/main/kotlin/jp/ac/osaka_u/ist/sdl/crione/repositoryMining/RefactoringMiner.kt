@@ -14,21 +14,19 @@ class RefactoringMiner
 
 val logger: Logger = LoggerFactory.getLogger(RefactoringMiner::class.java)
 
-fun mining(repository: Repository, trackingBranch: String): List<Pair<String, String>> {
+fun mining(repository: Repository, trackingBranch: String): Set<String> {
     val miner: GitHistoryRefactoringMiner = GitHistoryRefactoringMinerImpl()
-    val extractedCodeAndCommitHashes: MutableList<Pair<String, String>> = mutableListOf()
+    val extractedCode: MutableSet<String> = mutableSetOf()
     miner.detectAll(repository, trackingBranch, object : RefactoringHandler() {
         override fun handle(commitId: String?, refactorings: List<Refactoring>?) {
-            val extractedMethodList: List<Pair<String, String>> = refactorings!!.asSequence().filter(::isExtractMethodRefactoring)
+            val extractedMethodList: Set<String> = refactorings!!.asSequence().filter(::isExtractMethodRefactoring)
                     .map { flatStatements(it as ExtractOperationRefactoring) }
                     .distinct()
-                    .map { contents -> contents to commitId!! }
-                    .toList()
+                    .toSet()
 
-            extractedMethodList.map { it.toString() }
-                    .forEach(logger::info)
+            extractedMethodList.forEach(logger::info)
 
-            extractedCodeAndCommitHashes.addAll(extractedMethodList)
+            extractedCode.addAll(extractedMethodList)
         }
 
         override fun handleException(commitId: String?, e: Exception?) {
@@ -36,7 +34,7 @@ fun mining(repository: Repository, trackingBranch: String): List<Pair<String, St
         }
     })
 
-    return extractedCodeAndCommitHashes
+    return extractedCode
 }
 
 private fun isExtractMethodRefactoring(refactoring: Refactoring): Boolean {

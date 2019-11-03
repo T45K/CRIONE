@@ -6,11 +6,6 @@ class MainKtTest {
 
     @Test
     fun testMain1() {
-        main(arrayOf("-p", "sample/refactoring-toy-example", "-c", "https://github.com/danilofes/refactoring-toy-example.git", "-s", "src"))
-    }
-
-    @Test
-    fun testMain2() {
-        main(arrayOf("-p", "sample/refactoring-toy-example", "-c", "https://github.com/danilofes/refactoring-toy-example.git", "-s", "source"))
+        main(arrayOf("-m", "s", "-p", "sample/refactoring-toy-example", "-c", "https://github.com/danilofes/refactoring-toy-example.git", "-s", "src"))
     }
 }
