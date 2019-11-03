@@ -5,12 +5,9 @@ import org.apache.commons.codec.digest.DigestUtils.md5Hex
 fun search(query: String, sourceCodes: List<Pair<String, String>>) =
         sourceCodes.flatMap { sourceCode: Pair<String, String> -> searchFromSingleSourceCode(query, sourceCode) }
 
-private fun searchFromSingleSourceCode(query: String, sourceCode: Pair<String, String>, tokenThreshold: Int = 30): List<Clone> {
+private fun searchFromSingleSourceCode(query: String, sourceCode: Pair<String, String>): List<Clone> {
     val tokens: List<Triple<String, Int, Int>> = getTokenList(sourceCode.second)
     val (querySize: Int, hashedQuery: String) = analyzeQuery(query)
-    if (querySize < tokenThreshold) {
-        return emptyList()
-    }
 
     val clones: MutableList<Clone> = mutableListOf()
     for (i in querySize..tokens.size) {

@@ -1,34 +1,47 @@
 package jp.ac.osaka_u.ist.sdl.crione
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import jp.ac.osaka_u.ist.sdl.crione.cloneSearch.Clone
 import jp.ac.osaka_u.ist.sdl.crione.cloneSearch.search
-import jp.ac.osaka_u.ist.sdl.crione.repositoryMining.MyRepository
 import jp.ac.osaka_u.ist.sdl.crione.repositoryMining.mining
 import org.eclipse.jgit.lib.Repository
 import org.refactoringminer.util.GitServiceImpl
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.nio.file.Files
+import java.nio.file.Path
 import java.nio.file.Paths
+import java.nio.file.StandardOpenOption
+import kotlin.streams.toList
 
 class Main
 
 val logger: Logger = LoggerFactory.getLogger(Main::class.java)
+val JSON_FILE_PATH: Path = Paths.get("src/main/resources/queryCode.json")
 
 fun main(args: Array<String>) {
-    val (projectDir, cloneURL, srcDirs, trackingBranch) = buildFromArgs(args.toList())
-    val repository: Repository = GitServiceImpl().cloneIfNotExists(projectDir, cloneURL)
-    val miningResult: List<Pair<String, String>> = mining(repository, trackingBranch)
+    val (mode: Mode, projectDir, cloneURL, srcDir, trackingBranch) = buildFromArgs(args.toList())
+    val mapper: ObjectMapper = jacksonObjectMapper()
+    val queryCodes: MutableSet<String> = mapper.readValue(JSON_FILE_PATH.toFile())
 
-    val myRepository = MyRepository(repository)
-    for ((extractedCode: String, commitId: String) in miningResult) {
-        myRepository.checkout(commitId)
-        val srcDir: String = srcDirs.find { Files.exists(Paths.get(projectDir, it)) } ?: ""
-        val sourceCodes: List<Pair<String, String>> = myRepository.getSourceCodes(Paths.get(projectDir, srcDir))
+    when (mode) {
+        Mode.SEARCH -> {
+            val sourceCodes: List<Pair<String, String>> = Files.walk(Paths.get(projectDir, srcDir))
+                    .filter { it.toString().endsWith(".java") }
+                    .map { it.toString() to String(Files.readAllBytes(it)) }
+                    .toList()
 
-        logger.info(extractedCode)
-
-        val clone: List<Clone> = search(extractedCode, sourceCodes)
-        logger.info(clone.size.toString())
+            val clones: List<List<Clone>> = queryCodes.map { search(it, sourceCodes) }
+                    .toList()
+        }
+        Mode.MINING -> {
+            val repository: Repository = GitServiceImpl().cloneIfNotExists(projectDir, cloneURL)
+            val extractedCodes: Set<String> = mining(repository, trackingBranch)
+            queryCodes.addAll(extractedCodes)
+            val contents: ByteArray = jacksonObjectMapper().writeValueAsBytes(queryCodes)
+            Files.write(JSON_FILE_PATH, contents, StandardOpenOption.WRITE)
+        }
     }
 }
