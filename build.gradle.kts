@@ -44,6 +44,9 @@ dependencies {
     // Use args4j
     compile("args4j:args4j:2.33")
 
+    // Use JSON
+    compile("com.fasterxml.jackson.module:jackson-module-kotlin:2.10.0")
+
     // Use the Kotlin test library.
     testCompile("org.jetbrains.kotlin:kotlin-test")
 
