@@ -85,6 +85,6 @@ val jar by tasks.getting(Jar::class) {
 
 val run by tasks.getting(JavaExec::class) {
     if (project.hasProperty("args")) {
-        args = (project.property("args") as String).split("\\s+")
+        args = (project.property("args") as String).split(" ")
     }
 }
