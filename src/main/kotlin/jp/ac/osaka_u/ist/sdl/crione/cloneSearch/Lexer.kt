@@ -33,7 +33,7 @@ fun getTokenizedStatement(code: String): String {
         tokenType = scanner.nextToken
     }
 
-    return tokens.joinToString(" ")
+    return if (tokens.size < 30) "" else tokens.joinToString(" ")
 }
 
 private fun isIdentifier(tokenType: Int): Boolean {
