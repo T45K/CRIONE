@@ -1,6 +1,7 @@
 package jp.ac.osaka_u.ist.sdl.crione
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.exc.MismatchedInputException
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
@@ -46,7 +47,9 @@ fun main(args: Array<String>) {
         Mode.MINING -> {
             val extractedCodes: Set<String> = mining(repository, trackingBranch)
             queryCodes.addAll(extractedCodes)
-            val contents: ByteArray = jacksonObjectMapper().writeValueAsBytes(queryCodes)
+            val objectMapper = ObjectMapper()
+            objectMapper.enable(SerializationFeature.INDENT_OUTPUT)
+            val contents: ByteArray = objectMapper.writeValueAsBytes(queryCodes)
             Files.write(JSON_FILE_PATH, contents, StandardOpenOption.WRITE)
         }
     }
