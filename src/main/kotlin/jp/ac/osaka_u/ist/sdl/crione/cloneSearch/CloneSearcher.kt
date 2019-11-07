@@ -24,8 +24,12 @@ private fun searchFromSingleSourceCode(query: String, sourceCode: Pair<String, S
     return clones
 }
 
+/**
+ * queryがすでに正規化されている形になっているので，そのトークン数は空白の数+1になる
+ */
 private fun analyzeQuery(query: String): Pair<Int, String> {
-    val tokens: List<Triple<String, Int, Int>> = getTokenList(query)
-    val normalizedCode = tokens.joinToString(" ") { token -> token.first }
-    return tokens.size to md5Hex(normalizedCode)
+    val querySize: Int = query.toCharArray()
+            .filter { it == ' ' }
+            .count() + 1
+    return querySize to md5Hex(query)
 }
