@@ -15,13 +15,14 @@ class RefactoringMiner
 
 val logger: Logger = LoggerFactory.getLogger(RefactoringMiner::class.java)
 
-fun mining(repository: Repository, trackingBranch: String): Set<String> {
+fun mining(repository: Repository, trackingBranch: String, tokenThreshold: Int = 30): Set<String> {
     val miner: GitHistoryRefactoringMiner = GitHistoryRefactoringMinerImpl()
     val extractedCode: MutableSet<String> = mutableSetOf()
     miner.detectAll(repository, trackingBranch, object : RefactoringHandler() {
         override fun handle(commitId: String?, refactorings: List<Refactoring>?) {
             val extractedMethods: Set<String> = refactorings!!.asSequence().filter(::isExtractMethodRefactoring)
-                    .map { formatStatements(it as ExtractOperationRefactoring) }
+                    .map { formatStatements(it as ExtractOperationRefactoring, tokenThreshold) }
+                    .filter { it.isNotEmpty() }
                     .distinct()
                     .toSet()
 
@@ -40,7 +41,7 @@ private fun isExtractMethodRefactoring(refactoring: Refactoring): Boolean {
     return refactoring.name == "Extract Method"
 }
 
-private fun formatStatements(refactoring: ExtractOperationRefactoring): String {
+private fun formatStatements(refactoring: ExtractOperationRefactoring, tokenThreshold: Int): String {
     val mapper: UMLOperationBodyMapper = refactoring.bodyMapper
-    return getTokenizedStatement(mapper.mappings.joinToString("") { it.fragment1.toString() })
+    return getTokenizedStatement(mapper.mappings.joinToString("") { it.fragment1.toString() }, tokenThreshold)
 }

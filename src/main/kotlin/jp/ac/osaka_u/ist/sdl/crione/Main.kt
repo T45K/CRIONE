@@ -43,7 +43,9 @@ fun main(args: Array<String>) {
 
             val clones: List<List<Clone>> = queryCodes.map { search(it, sourceCodes) }
                     .toList()
+            logger.info(clones.toString())
         }
+
         Mode.MINING -> {
             val extractedCodes: Set<String> = mining(repository, trackingBranch)
             queryCodes.addAll(extractedCodes)
