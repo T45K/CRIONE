@@ -11,19 +11,9 @@ class RefactoringMinerKtTest {
     @Test
     fun testMining() {
         val repository: Repository = TestInstance.repositoryInstance
-        val results: Set<String> = mining(repository, "master")
+        val results: Set<String> = mining(repository, "master", 0)
         assertEquals(2, results.size)
-        assertThat(results).contains("int s3=3;\n" +
-                "int s4=4;\n" +
-                "int s5=5;\n" +
-                "int s6=6;\n" +
-                "int s7=7;\n")
-        assertThat(results).contains("System.out.println(\"...\");\n")
-    }
-
-    @Test
-    fun hoge() {
-        val hoge = GitServiceImpl().cloneIfNotExists("target/jfreechart", "")
-        mining(hoge, "master")
+        assertThat(results).contains("int $ = $ ; int $ = $ ; int $ = $ ; int $ = $ ; int $ = $ ;")
+        assertThat(results).contains("$ . $ . $ ( $ ) ;")
     }
 }
