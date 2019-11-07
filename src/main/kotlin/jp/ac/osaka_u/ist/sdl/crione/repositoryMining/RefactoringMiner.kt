@@ -43,5 +43,5 @@ private fun isExtractMethodRefactoring(refactoring: Refactoring): Boolean {
 
 private fun formatStatements(refactoring: ExtractOperationRefactoring, tokenThreshold: Int): String {
     val mapper: UMLOperationBodyMapper = refactoring.bodyMapper
-    return getTokenizedStatement(mapper.mappings.joinToString("") { it.fragment1.toString() }, tokenThreshold)
+    return getTokenizedStatement(mapper.mappings.joinToString("") { it.fragment1.toRawString() }, tokenThreshold)
 }
