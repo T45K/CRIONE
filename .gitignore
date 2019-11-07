@@ -115,7 +115,6 @@ $RECYCLE.BIN/
 *.lnk
 
 ### Gradle ###
-.gradle
 build/
 
 # Ignore Gradle GUI config
@@ -132,5 +131,12 @@ gradle-app.setting
 
 ### Gradle Patch ###
 **/build/
+
+### intellij and more... ###
+.idea/
+camel/
+out/
+sample/refactoring-toy-example/
+
 
 # End of https://www.gitignore.io/api/java,linux,macos,gradle,kotlin,windows
