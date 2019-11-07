@@ -20,7 +20,7 @@ fun getTokenList(code: String): List<Triple<String, Int, Int>> {
     return tokens
 }
 
-fun getTokenizedStatement(code: String): String {
+fun getTokenizedStatement(code: String, tokenThreshold: Int): String {
     val scanner: IScanner = ToolFactory.createScanner(false, false, true, false)
     scanner.source = code.toCharArray()
 
@@ -33,7 +33,7 @@ fun getTokenizedStatement(code: String): String {
         tokenType = scanner.nextToken
     }
 
-    return if (tokens.size < 30) "" else tokens.joinToString(" ")
+    return if (tokens.size < tokenThreshold) "" else tokens.joinToString(" ")
 }
 
 private fun isIdentifier(tokenType: Int): Boolean {
