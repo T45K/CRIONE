@@ -10,16 +10,16 @@ data class Config(val mode: Mode,
                   val srcDir: String,
                   val trackingBranch: String)
 
-fun buildFromArgs(args: List<String>): Config {
+fun buildFromArgs(args: List<String>): Config? {
     val builder = Builder()
     val parser = CmdLineParser(builder)
 
-    try {
+    return try {
         parser.parseArgument(args)
-        return builder.build()
+        builder.build()
     } catch (e: CmdLineException) {
         parser.printUsage(System.out)
-        throw RuntimeException()
+        null
     }
 }
 
@@ -31,15 +31,18 @@ class Builder {
     private var trackingBranch: String = "master"
 
     fun build(): Config {
+        if (mode == Mode.SEARCH && srcDir.isEmpty()) {
+            throw RuntimeException("Specifying -s is required if you want to search")
+        }
         return Config(mode, projectDir, cloneURL, srcDir, trackingBranch)
     }
 
     @Option(name = "-m", aliases = ["--mode"], usage = "mode: SEARCH or MINING", required = true)
     private fun setMode(modeString: String) {
         this.mode = when (modeString) {
-            "s" -> Mode.SEARCH
-            "m" -> Mode.MINING
-            else -> throw RuntimeException()
+            "s", "search", "S", "SEARCH" -> Mode.SEARCH
+            "m", "mining", "M", "MINING" -> Mode.MINING
+            else -> throw RuntimeException("Invalid mode specification")
         }
     }
 
@@ -53,7 +56,7 @@ class Builder {
         this.cloneURL = cloneURL
     }
 
-    @Option(name = "-s", aliases = ["--src-dir"], usage = "Source directory", required = true)
+    @Option(name = "-s", aliases = ["--src-dir"], usage = "Source directory")
     private fun setSrcDir(srcDir: String) {
         this.srcDir = srcDir
     }
