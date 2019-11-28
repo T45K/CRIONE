@@ -11,8 +11,8 @@ class SQL {
     private val statement: Statement = connection.createStatement()
 
     init {
-        statement.executeUpdate("create table if not exists query (code string, id long primary key)")
-        statement.executeUpdate("create table if not exists location (id Long, commitHash string, projectName string)")
+        statement.executeUpdate("create table if not exists query (code string, id integer primary key)")
+        statement.executeUpdate("create table if not exists location (id integer , commitHash string, projectName string)")
     }
 
     fun insert(code: String, commitHash: String, projectName: String) {
