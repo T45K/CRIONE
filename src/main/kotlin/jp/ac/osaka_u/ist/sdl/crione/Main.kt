@@ -17,7 +17,7 @@ class Main
 val logger: Logger = LoggerFactory.getLogger(Main::class.java)
 
 fun main(args: Array<String>) {
-    val (mode: Mode, projectDir, cloneURL, srcDir, trackingBranch) = buildFromArgs(args.toList())
+    val (mode: Mode, projectDir, cloneURL, srcDir, trackingBranch) = buildFromArgs(args.toList()) ?: return
     val repository: Repository = GitServiceImpl().cloneIfNotExists(projectDir, cloneURL)
     val sql = SQL()
     when (mode) {
