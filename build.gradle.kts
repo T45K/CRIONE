@@ -44,6 +44,9 @@ dependencies {
     // Use args4j
     compile("args4j:args4j:2.33")
 
+    // Use jdbc
+    compile("org.xerial:sqlite-jdbc:3.28.0")
+
     // Use JSON
     compile("com.fasterxml.jackson.module:jackson-module-kotlin:2.10.0")
 
@@ -56,6 +59,8 @@ dependencies {
     // Use AssertJ
     testCompile("org.assertj:assertj-core:3.14.0")
 
+    // Use mock
+    testCompile("com.nhaarman:mockito-kotlin:1.5.0")
 }
 
 application {

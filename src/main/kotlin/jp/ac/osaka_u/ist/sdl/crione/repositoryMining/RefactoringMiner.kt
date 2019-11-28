@@ -15,15 +15,16 @@ class RefactoringMiner
 
 val logger: Logger = LoggerFactory.getLogger(RefactoringMiner::class.java)
 
-fun mining(repository: Repository, trackingBranch: String, tokenThreshold: Int = 30): Set<String> {
+fun mining(repository: Repository, trackingBranch: String, tokenThreshold: Int = 30): Set<Pair<String, String>> {
     val miner: GitHistoryRefactoringMiner = GitHistoryRefactoringMinerImpl()
-    val extractedCode: MutableSet<String> = mutableSetOf()
+    val extractedCode: MutableSet<Pair<String, String>> = mutableSetOf()
     miner.detectAll(repository, trackingBranch, object : RefactoringHandler() {
         override fun handle(commitId: String?, refactorings: List<Refactoring>?) {
-            val extractedMethods: Set<String> = refactorings!!.asSequence().filter(::isExtractMethodRefactoring)
+            val extractedMethods: Set<Pair<String, String>> = refactorings!!.asSequence().filter(::isExtractMethodRefactoring)
                     .map { formatStatements(it as ExtractOperationRefactoring, tokenThreshold) }
                     .filter { it.isNotEmpty() }
                     .distinct()
+                    .map { it to commitId!! }
                     .toSet()
 
             extractedCode.addAll(extractedMethods)

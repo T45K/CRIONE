@@ -1,9 +1,10 @@
 package jp.ac.osaka_u.ist.sdl.crione.cloneSearch
 
+import jp.ac.osaka_u.ist.sdl.crione.db.Query
 import org.apache.commons.codec.digest.DigestUtils.md5Hex
 
-fun search(query: String, sourceCodes: List<Pair<String, String>>) =
-        sourceCodes.flatMap { sourceCode: Pair<String, String> -> searchFromSingleSourceCode(query, sourceCode) }
+fun search(query: Query, sourceCodes: List<Pair<String, String>>) =
+        sourceCodes.flatMap { sourceCode: Pair<String, String> -> searchFromSingleSourceCode(query.code, sourceCode) }
 
 private fun searchFromSingleSourceCode(query: String, sourceCode: Pair<String, String>): List<Clone> {
     val tokens: List<Triple<String, Int, Int>> = getTokenList(sourceCode.second)
