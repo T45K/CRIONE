@@ -4,17 +4,14 @@ import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.ResultSet
 import java.sql.Statement
-import java.util.concurrent.atomic.AtomicLong
-
 
 class SQL() {
     private val connection: Connection = DriverManager.getConnection("jdbc:sqlite:./code.db")
             ?: throw RuntimeException("bad db connection")
     private val statement: Statement = connection.createStatement()
-    private val counter: AtomicLong = AtomicLong()
 
     init {
-        statement.executeUpdate("create table if not exists query (code string, id long)")
+        statement.executeUpdate("create table if not exists query (code string, id long primary key)")
         statement.executeUpdate("create table if not exists location (id Long, commitHash string, projectName string)")
     }
 
@@ -23,9 +20,8 @@ class SQL() {
         if (id != -1L) {
             statement.executeUpdate("insert into location values($id, '$commitHash', '$projectName')")
         } else {
-            val currentId: Long = counter.incrementAndGet()
-            statement.executeUpdate("insert into query values('$code', $currentId)")
-            statement.executeUpdate("insert into location values($currentId, '$commitHash', '$projectName')")
+            statement.executeUpdate("insert into query(code) values('$code')")
+            statement.executeUpdate("insert into location values(${getId(code, "code", "query")}, '$commitHash', '$projectName')")
         }
     }
 
