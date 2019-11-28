@@ -5,7 +5,7 @@ import java.sql.DriverManager
 import java.sql.ResultSet
 import java.sql.Statement
 
-class SQL() {
+class SQL {
     private val connection: Connection = DriverManager.getConnection("jdbc:sqlite:./code.db")
             ?: throw RuntimeException("bad db connection")
     private val statement: Statement = connection.createStatement()
