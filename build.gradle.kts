@@ -59,6 +59,8 @@ dependencies {
     // Use AssertJ
     testCompile("org.assertj:assertj-core:3.14.0")
 
+    // Use mock
+    testCompile("com.nhaarman:mockito-kotlin:1.5.0")
 }
 
 application {

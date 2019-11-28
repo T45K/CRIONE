@@ -1,5 +1,6 @@
 package jp.ac.osaka_u.ist.sdl.crione.cloneSearch
 
+import jp.ac.osaka_u.ist.sdl.crione.db.Query
 import org.junit.Test
 import java.nio.file.Files
 import java.nio.file.Path
@@ -10,7 +11,7 @@ class CloneSearcherKtTest {
 
     @Test
     fun testSearch() {
-        val query = "int $ = $ ; char $ = $ ; double $ = $ ; float $ = $ ; long $ = $ ; $ $ = $ ;"
+        val query = Query("int $ = $ ; char $ = $ ; double $ = $ ; float $ = $ ; long $ = $ ; $ $ = $ ;", mutableListOf())
         val fileList: List<Pair<String, String>> = listOf(getSourceCode(Paths.get("sample/cloneSearch/File1.java")), getSourceCode(Paths.get("sample/cloneSearch/File2.java")), getSourceCode(Paths.get("sample/cloneSearch/File3.java")))
 
         val clones: List<Clone> = search(query, fileList)

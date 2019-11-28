@@ -12,6 +12,8 @@ class RefactoringMinerKtTest {
     fun testMining() {
         val repository: Repository = TestInstance.repositoryInstance
         val results: Set<String> = mining(repository, "master", 0)
+                .map { it.first }
+                .toSet()
         assertEquals(2, results.size)
         assertThat(results).contains("int $ = $ ; int $ = $ ; int $ = $ ; int $ = $ ; int $ = $ ;")
         assertThat(results).contains("$ . $ . $ ( $ ) ;")
