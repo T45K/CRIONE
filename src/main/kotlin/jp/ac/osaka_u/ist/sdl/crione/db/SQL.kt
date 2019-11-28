@@ -11,17 +11,17 @@ class SQL {
     private val statement: Statement = connection.createStatement()
 
     init {
-        statement.executeUpdate("create table if not exists query (code string, id long primary key)")
-        statement.executeUpdate("create table if not exists location (id Long, commitHash string, projectName string)")
+        statement.executeUpdate("create table if not exists query (code string, id integer primary key)")
+        statement.executeUpdate("create table if not exists location (id integer , commitHash string, projectName string)")
     }
 
     fun insert(code: String, commitHash: String, projectName: String) {
-        val id: Long = getIdByCodeFromQuery(code)
-        if (id != -1L) {
+        val id: Int = findIdByCodeFromQuery(code)
+        if (id != -1) {
             statement.executeUpdate("insert into location values($id, '$commitHash', '$projectName')")
         } else {
             statement.executeUpdate("insert into query(code) values('$code')")
-            statement.executeUpdate("insert into location values(${getIdByCodeFromQuery(code)}, '$commitHash', '$projectName')")
+            statement.executeUpdate("insert into location values(${findIdByCodeFromQuery(code)}, '$commitHash', '$projectName')")
         }
     }
 
@@ -50,8 +50,8 @@ class SQL {
         return locations
     }
 
-    private fun getIdByCodeFromQuery(code: String): Long {
-        val result: ResultSet = statement.executeQuery("select * from 'query' where 'code' = '$code'")
-        return if (result.next()) result.getLong("id") else -1L
+    private fun findIdByCodeFromQuery(code: String): Int {
+        val result: ResultSet = statement.executeQuery("select * from query where code = '$code'")
+        return if (result.next()) result.getInt("id") else -1
     }
 }
