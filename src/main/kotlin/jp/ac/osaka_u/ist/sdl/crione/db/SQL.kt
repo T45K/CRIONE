@@ -5,7 +5,7 @@ import java.sql.DriverManager
 import java.sql.ResultSet
 import java.sql.Statement
 
-class SQL() {
+class SQL {
     private val connection: Connection = DriverManager.getConnection("jdbc:sqlite:./code.db")
             ?: throw RuntimeException("bad db connection")
     private val statement: Statement = connection.createStatement()
@@ -16,12 +16,12 @@ class SQL() {
     }
 
     fun insert(code: String, commitHash: String, projectName: String) {
-        val id: Long = getId(code, "code", "query")
+        val id: Long = getIdByCodeFromQuery(code)
         if (id != -1L) {
             statement.executeUpdate("insert into location values($id, '$commitHash', '$projectName')")
         } else {
             statement.executeUpdate("insert into query(code) values('$code')")
-            statement.executeUpdate("insert into location values(${getId(code, "code", "query")}, '$commitHash', '$projectName')")
+            statement.executeUpdate("insert into location values(${getIdByCodeFromQuery(code)}, '$commitHash', '$projectName')")
         }
     }
 
@@ -50,8 +50,8 @@ class SQL() {
         return locations
     }
 
-    private fun getId(recordName: String, columnName: String, tableName: String): Long {
-        val result: ResultSet = statement.executeQuery("select * from $tableName where $columnName = $recordName")
+    private fun getIdByCodeFromQuery(code: String): Long {
+        val result: ResultSet = statement.executeQuery("select * from 'query' where 'code' = '$code'")
         return if (result.next()) result.getLong("id") else -1L
     }
 }
