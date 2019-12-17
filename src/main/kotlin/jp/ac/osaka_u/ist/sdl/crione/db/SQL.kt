@@ -16,12 +16,12 @@ class SQL() {
     }
 
     fun insert(code: String, commitHash: String, projectName: String) {
-        val id: Long = getId(code)
+        val id: Long = getId(code, "code", "query")
         if (id != -1L) {
             statement.executeUpdate("insert into location values($id, '$commitHash', '$projectName')")
         } else {
             statement.executeUpdate("insert into query(code) values('$code')")
-            statement.executeUpdate("insert into location values(${getId(code)}, '$commitHash', '$projectName')")
+            statement.executeUpdate("insert into location values(${getId(code, "code", "query")}, '$commitHash', '$projectName')")
         }
     }
 
@@ -54,8 +54,8 @@ class SQL() {
         return locations
     }
 
-    private fun getId(recordName: String): Long {
-        val result: ResultSet = statement.executeQuery("select * from query where code = $recordName")
+    private fun getId(recordName: String, columnName: String, tableName: String): Long {
+        val result: ResultSet = statement.executeQuery("select * from $tableName where $columnName = $recordName")
         return if (result.next()) result.getLong("id") else -1L
     }
 }
