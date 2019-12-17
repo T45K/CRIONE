@@ -8,7 +8,7 @@ import java.sql.Statement
 class SQL() {
     private val connection: Connection = DriverManager.getConnection("jdbc:sqlite:./code.db")
             ?: throw RuntimeException("bad db connection")
-    private val statement: Statement = connection.createStatement()
+    private var statement: Statement = connection.createStatement()
 
     init {
         statement.executeUpdate("create table if not exists query (code string, id long primary key)")
@@ -26,6 +26,7 @@ class SQL() {
     }
 
     fun findAll(): List<Query> {
+        statement = connection.createStatement()
         val queryResultSet: ResultSet = statement.executeQuery("select * from query")
         val queries: MutableList<Query> = mutableListOf()
         while (queryResultSet.next()) {
