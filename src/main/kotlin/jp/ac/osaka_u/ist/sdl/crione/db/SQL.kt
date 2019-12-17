@@ -51,7 +51,7 @@ class SQL() {
     }
 
     private fun getId(recordName: String, columnName: String, tableName: String): Long {
-        val result: ResultSet = statement.executeQuery("select * from $tableName where $columnName = $recordName")
+        val result: ResultSet = statement.executeQuery("select * from $tableName where $columnName = '$recordName'")
         return if (result.next()) result.getLong("id") else -1L
     }
 }
