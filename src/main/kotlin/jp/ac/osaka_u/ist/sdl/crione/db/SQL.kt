@@ -33,7 +33,10 @@ class SQL() {
             val code: String = queryResultSet.getString("code")
             val id: Long = queryResultSet.getLong("id")
             val locations: List<Location> = getLocations(id)
-            queries.add(Query(code, locations))
+            val query = Query(code, locations)
+            println(query)
+            queries.add(query)
+
         }
 
         return queries
