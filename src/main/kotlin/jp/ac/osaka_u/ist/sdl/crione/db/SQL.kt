@@ -11,7 +11,7 @@ class SQL {
     private val statement: Statement = connection.createStatement()
 
     init {
-        statement.executeUpdate("create table if not exists query (code string, id integer primary key)")
+        statement.executeUpdate("create table if not exists codeFragment (code string, id integer primary key)")
         statement.executeUpdate("create table if not exists location (id integer , commitHash string, projectName string)")
     }
 
@@ -20,22 +20,21 @@ class SQL {
         if (id != -1) {
             statement.executeUpdate("insert into location values($id, '$commitHash', '$projectName')")
         } else {
-            statement.executeUpdate("insert into query(code) values('$code')")
+            statement.executeUpdate("insert into codeFragment(code) values('$code')")
             statement.executeUpdate("insert into location values(${findIdByCodeFromQuery(code)}, '$commitHash', '$projectName')")
         }
     }
 
     fun findAll(): List<Query> {
-        val queryResultSet: ResultSet = statement.executeQuery("select * from query")
-        val queries: MutableList<Query> = mutableListOf()
+        val queryResultSet: ResultSet = statement.executeQuery("select * from codeFragment")
+        val queries: MutableList<Pair<String, Long>> = mutableListOf()
         while (queryResultSet.next()) {
             val code: String = queryResultSet.getString("code")
             val id: Long = queryResultSet.getLong("id")
-            val locations: List<Location> = getLocations(id)
-            queries.add(Query(code, locations))
+            queries.add(code to id)
         }
 
-        return queries
+        return queries.map { Query(it.first, getLocations(it.second)) }
     }
 
     fun close() = connection.close()
@@ -51,7 +50,7 @@ class SQL {
     }
 
     private fun findIdByCodeFromQuery(code: String): Int {
-        val result: ResultSet = statement.executeQuery("select * from query where code = '$code'")
+        val result: ResultSet = statement.executeQuery("select * from codeFragment where code = '$code'")
         return if (result.next()) result.getInt("id") else -1
     }
 }
