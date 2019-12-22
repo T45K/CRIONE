@@ -27,15 +27,14 @@ class SQL {
 
     fun findAll(): List<Query> {
         val queryResultSet: ResultSet = statement.executeQuery("select * from codeFragment")
-        val queries: MutableList<Query> = mutableListOf()
+        val queries: MutableList<Pair<String, Long>> = mutableListOf()
         while (queryResultSet.next()) {
             val code: String = queryResultSet.getString("code")
             val id: Long = queryResultSet.getLong("id")
-            val locations: List<Location> = getLocations(id)
-            queries.add(Query(code, locations))
+            queries.add(code to id)
         }
 
-        return queries
+        return queries.map { Query(it.first, getLocations(it.second)) }
     }
 
     fun close() = connection.close()
